@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nutrivia | Pharmacy Records</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#1f9d55;--green-dark:#14703c;--green-light:#e8f7ee;
+    --accent:#f6b93b;--text:#1b2a22;--muted:#5d6b63;--card:#f7faf8;--red:#d64545;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Poppins',sans-serif;color:var(--text);background:linear-gradient(135deg,var(--green-light),#fff 60%);min-height:100vh;line-height:1.5}
+  .container{width:min(1200px,94%);margin:auto}
+  header{background:#fff;border-bottom:1px solid #e6efe9}
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+  .logo{font-size:1.6rem;font-weight:800;color:var(--green-dark);text-decoration:none}
+  .logo span{color:var(--accent)}
+  .back{font-size:.9rem;color:var(--green-dark);font-weight:600;text-decoration:none}
+  main{padding:34px 0 60px}
+  h1{font-size:clamp(1.5rem,3.5vw,2.1rem);font-weight:800}
+  .sub{color:var(--muted);margin-bottom:22px}
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .stat{background:#fff;border:1px solid #e6efe9;border-radius:16px;padding:12px 22px}
+  .stat b{display:block;font-size:1.5rem;color:var(--green-dark);line-height:1.2}
+  .stat span{font-size:.82rem;color:var(--muted)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+  .toolbar input[type=search]{flex:1;min-width:200px;padding:11px 18px;border-radius:50px;border:1.5px solid #d5e6dc;font:inherit;outline:none}
+  .toolbar input[type=search]:focus{border-color:var(--green)}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:50px;font:600 .92rem 'Poppins',sans-serif;border:none;cursor:pointer;transition:.2s}
+  .btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 16px rgba(31,157,85,.3)}
+  .btn-primary:hover{background:var(--green-dark);transform:translateY(-2px)}
+  .btn-outline{background:#fff;border:2px solid var(--green);color:var(--green-dark)}
+  .btn-outline:hover{background:var(--green);color:#fff}
+  .btn-danger{background:#fff;border:2px solid var(--red);color:var(--red)}
+  .btn-danger:hover{background:var(--red);color:#fff}
+  .table-wrap{background:#fff;border:1px solid #e6efe9;border-radius:20px;overflow-x:auto;box-shadow:0 14px 34px rgba(0,0,0,.05)}
+  table{width:100%;border-collapse:collapse;min-width:1600px}
+  thead th{background:var(--green-dark);color:#fff;text-align:left;padding:14px 12px;font-size:.88rem;font-weight:600;white-space:nowrap}
+  tbody td{padding:8px 8px;border-bottom:1px solid #eef3f0;vertical-align:middle}
+  tbody tr:hover{background:#fafdfb}
+  td input,td textarea{width:100%;padding:9px 11px;border:1.5px solid #e1ece5;border-radius:10px;font:inherit;font-size:.9rem;background:var(--card);outline:none;transition:.15s}
+  td textarea{resize:vertical;min-height:40px;height:40px}
+  td input:focus,td textarea:focus{border-color:var(--green);background:#fff}
+  td.no{width:44px;text-align:center;font-weight:700;color:var(--muted)}
+  td.c-name{min-width:190px}
+  td.c-qty{width:110px;min-width:110px}
+  td.c-qty input,td.c-disc input{min-width:70px;text-align:center;font-weight:600;-moz-appearance:textfield}
+  td.c-qty input::-webkit-outer-spin-button,td.c-qty input::-webkit-inner-spin-button,td.c-disc input::-webkit-outer-spin-button,td.c-disc input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  td.c-addr{min-width:220px}
+  td.c-phone{min-width:150px}
+  td.c-loc{min-width:230px}
+  td.c-del{width:54px;text-align:center}
+  td.c-disc{width:120px;min-width:120px}
+  td.c-calc{min-width:120px;font-weight:600;white-space:nowrap;padding:8px 12px}
+  td.c-total{color:var(--green-dark);font-weight:700}
+  .disc-wrap{position:relative}
+  .disc-wrap input{padding-right:26px;padding-left:8px}
+  .disc-wrap::after{content:"%";position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none}
+  .mrp-box{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e6efe9;border-radius:16px;padding:8px 18px;font-size:.88rem;color:var(--muted)}
+  .mrp-box input{width:100px;padding:7px 10px;border:1.5px solid #d5e6dc;border-radius:10px;font:inherit;font-weight:600;color:var(--text);outline:none}
+  .mrp-box input:focus{border-color:var(--green)}
+  .mrp-box input.wide{width:120px}
+  td.c-inv{width:64px;text-align:center}
+  .icon-btn.inv{background:#fff7e0;border-color:#f3dca0}
+  .icon-btn.inv:hover{background:var(--accent);border-color:var(--accent)}
+  tfoot td{padding:14px 12px;font-weight:700;background:var(--green-light);color:var(--green-dark);white-space:nowrap}
+  .loc-box{display:flex;gap:6px;align-items:center}
+  .icon-btn{flex:none;width:36px;height:36px;border-radius:10px;border:1.5px solid #cfe9d9;background:var(--green-light);cursor:pointer;font-size:1rem;text-decoration:none;display:flex;align-items:center;justify-content:center}
+  .icon-btn:hover{background:var(--green);border-color:var(--green)}
+  .icon-btn.del{background:#fff;border-color:#f0c9c9;color:var(--red)}
+  .icon-btn.del:hover{background:var(--red);color:#fff}
+  .empty{text-align:center;padding:40px 10px;color:var(--muted);display:none}
+  .foot-note{margin-top:14px;font-size:.82rem;color:var(--muted)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#10251a;color:#fff;padding:10px 22px;border-radius:50px;font-size:.88rem;opacity:0;transition:.3s;z-index:9}
+  .toast.show{transform:translateX(-50%);opacity:1}
+  @media print{
+    header,.toolbar,.icon-btn,.foot-note{display:none!important}
+    .table-wrap{box-shadow:none;border:none}
+    td input,td textarea{border:none;background:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="index.html" class="logo">Nutri<span>via</span></a>
+    <a href="index.html" class="back">← Website par wapis</a>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Pharmacy Records</h1>
+  <p class="sub">Jin pharmacies ko aap ne product sale ke liye diya hai, un ki tafseel yahan likhein aur save karein.</p>
+
+  <div class="stats">
+    <div class="stat"><b id="statCount">0</b><span>Total Pharmacies</span></div>
+    <div class="stat"><b id="statQty">0</b><span>Total Quantity</span></div>
+    <div class="stat"><b id="statDisc">Rs. 0</b><span>Total Discount Diya</span></div>
+    <div class="stat"><b id="statAmt">Rs. 0</b><span>Total Amount (Discount ke baad)</span></div>
+    <div class="mrp-box">Product ki qeemat (MRP) Rs. <input type="number" id="mrp" min="0" value="1900"> / unit</div>
+    <div class="mrp-box">Batch No <input type="text" id="batch" class="wide" value="ERT-001"></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="search" placeholder="🔍 Pharmacy, address ya number se dhoondein...">
+    <button class="btn btn-primary" id="addBtn">＋ Nayi Pharmacy Add Karein</button>
+    <button class="btn btn-outline" id="csvBtn">⬇ Excel/CSV</button>
+    <button class="btn btn-outline" id="printBtn">🖨 Print</button>
+    <button class="btn btn-danger" id="clearBtn">Sab Delete</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Pharmacy Name</th>
+          <th>Qty</th>
+          <th>Discount 1</th>
+          <th>Rate (Discount ke baad)</th>
+          <th>Qty × Rate</th>
+          <th>Extra Discount 2<br><small style="font-weight:400">(total par)</small></th>
+          <th>Final Amount</th>
+          <th>Address</th>
+          <th>Contact</th>
+          <th>Location</th>
+          <th>Invoice</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td></td><td>Total</td>
+          <td id="fQty">0</td><td></td><td></td><td></td><td></td>
+          <td id="fAmt">Rs. 0</td>
+          <td colspan="5"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="empty" id="empty">Koi record nahi mila. "Nayi Pharmacy Add Karein" dabayein.</div>
+  </div>
+
+  <p class="foot-note">
+    💡 Data khud-ba-khud isi browser/device mein save hota hai. Location ke liye 📍 dabayein (GPS se link ban jata hai) ya Google Maps ka link khud paste karein. Backup ke liye waqtan-fawqtan "Excel/CSV" download kar lein.
+  </p>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY = "nutrivia_pharmacies_v1";
+let rows = [];
+try { rows = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ rows = []; }
+
+const tbody = document.getElementById("tbody");
+const empty = document.getElementById("empty");
+const searchEl = document.getElementById("search");
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(rows)); }catch(e){ toast("Save nahi ho saka"); } updateStats(); }
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function toast(t){ const el=document.getElementById("toast"); el.textContent=t; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),2200); }
+
+const mrpEl = document.getElementById("mrp");
+try { const m = localStorage.getItem("nutrivia_mrp"); if(m) mrpEl.value = m; } catch(e){}
+function getMrp(){ return parseFloat(mrpEl.value) || 0; }
+function money(n){ return "Rs. " + (Math.round(n*100)/100).toLocaleString("en-US"); }
+
+// Hisaab: 1) rate = MRP - discount1%   2) sub = rate x qty   3) final = sub - discount2%
+// Misaal: 1900 - 15% = 1615, x2 = 3230, - 10% = 2907
+function pct(v){ return Math.min(Math.max(parseFloat(v) || 0, 0), 100); }
+function calc(r){
+  const mrp = getMrp();
+  const qty = parseFloat(r.qty) || 0;
+  const d1 = pct(r.disc), d2 = pct(r.disc2);
+  const rate = mrp * (1 - d1/100);
+  const sub = rate * qty;
+  const extra = sub * d2/100;
+  const total = sub - extra;
+  return { rate, sub, extra, total, saved: mrp*qty - total, qty, d1, d2 };
+}
+
+function updateStats(){
+  let q=0, amt=0, saved=0;
+  rows.forEach(r=>{ const c=calc(r); q+=c.qty; amt+=c.total; saved+=c.saved; });
+  document.getElementById("statCount").textContent = rows.length;
+  document.getElementById("statQty").textContent = q;
+  document.getElementById("statDisc").textContent = money(saved);
+  document.getElementById("statAmt").textContent = money(amt);
+  document.getElementById("fQty").textContent = q;
+  document.getElementById("fAmt").textContent = money(amt);
+}
+
+mrpEl.addEventListener("input", ()=>{
+  try { localStorage.setItem("nutrivia_mrp", mrpEl.value); } catch(e){}
+  render();
+});
+
+function locLink(v){
+  v = (v||"").trim();
+  if(!v) return "#";
+  if(/^https?:\/\//i.test(v)) return v;
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(v);
+}
+
+function render(){
+  const q = searchEl.value.trim().toLowerCase();
+  tbody.innerHTML = "";
+  let shown = 0;
+  rows.forEach((r,i)=>{
+    const hay = (r.name+" "+r.address+" "+r.phone+" "+r.location).toLowerCase();
+    if(q && !hay.includes(q)) return;
+    shown++;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="no">${i+1}</td>
+      <td class="c-name"><input data-f="name" data-id="${r.id}" value="${esc(r.name)}" placeholder="Pharmacy ka naam"></td>
+      <td class="c-qty"><input data-f="qty" data-id="${r.id}" type="number" min="0" value="${esc(r.qty)}" placeholder="0"></td>
+      <td class="c-disc"><div class="disc-wrap"><input data-f="disc" data-id="${r.id}" type="number" min="0" max="100" step="any" value="${esc(r.disc)}" placeholder="0"></div></td>
+      <td class="c-calc rate">${money(calc(r).rate)}</td>
+      <td class="c-calc subt">${money(calc(r).sub)}</td>
+      <td class="c-disc"><div class="disc-wrap"><input data-f="disc2" data-id="${r.id}" type="number" min="0" max="100" step="any" value="${esc(r.disc2)}" placeholder="0"></div></td>
+      <td class="c-calc c-total total">${money(calc(r).total)}</td>
+      <td class="c-addr"><textarea data-f="address" data-id="${r.id}" placeholder="Poora address">${esc(r.address)}</textarea></td>
+      <td class="c-phone"><input data-f="phone" data-id="${r.id}" type="tel" value="${esc(r.phone)}" placeholder="03xx-xxxxxxx"></td>
+      <td class="c-loc">
+        <div class="loc-box">
+          <input data-f="location" data-id="${r.id}" value="${esc(r.location)}" placeholder="Map link / location">
+          <button class="icon-btn" title="Meri maujooda location lagayein" data-gps="${r.id}">📍</button>
+          <a class="icon-btn" title="Map kholein" target="_blank" rel="noopener" href="${esc(locLink(r.location))}">🗺</a>
+        </div>
+      </td>
+      <td class="c-inv"><button class="icon-btn inv" title="Invoice banayein" data-inv="${r.id}">🧾</button></td>
+      <td class="c-del"><button class="icon-btn del" title="Delete" data-del="${r.id}">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+  empty.style.display = shown ? "none" : "block";
+  updateStats();
+}
+
+function addRow(focus=true){
+  rows.push({id:uid(),name:"",qty:"",disc:"",disc2:"",address:"",phone:"",location:""});
+  save(); searchEl.value=""; render();
+  if(focus){
+    const inputs = tbody.querySelectorAll('input[data-f="name"]');
+    const last = inputs[inputs.length-1];
+    if(last){ last.focus(); last.scrollIntoView({block:"center",behavior:"smooth"}); }
+  }
+}
+
+tbody.addEventListener("input", e=>{
+  const t = e.target, id = t.dataset.id, f = t.dataset.f;
+  if(!id) return;
+  const r = rows.find(x=>x.id===id); if(!r) return;
+  r[f] = t.value; save();
+  if(f==="qty" || f==="disc" || f==="disc2"){
+    const tr = t.closest("tr"), c = calc(r);
+    tr.querySelector(".rate").textContent = money(c.rate);
+    tr.querySelector(".subt").textContent = money(c.sub);
+    tr.querySelector(".total").textContent = money(c.total);
+  }
+  if(f==="location"){ const a = t.closest(".loc-box").querySelector("a"); a.href = locLink(t.value); }
+});
+
+const batchEl = document.getElementById("batch");
+try { const b = localStorage.getItem("nutrivia_batch"); if(b) batchEl.value = b; } catch(e){}
+batchEl.addEventListener("input", ()=>{ try{ localStorage.setItem("nutrivia_batch", batchEl.value); }catch(e){} });
+
+const PRODUCT_NAME = "Nutrivia Restful Sleep (Anxiety Relief) - 30 Capsules";
+function n0(v){ return (Math.round(v*100)/100).toLocaleString("en-US"); }
+
+// Invoice: aap ke Word template jaisa (QTY, Particulars, Batch No, Rate, Total Amount; Gross/Discount/Total + Warranty)
+function openInvoice(id){
+  const r = rows.find(x=>x.id===id); if(!r) return;
+  const c = calc(r);
+  if(!c.qty){ toast("Pehle quantity likhein"); return; }
+  const d = new Date();
+  const date = String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();
+  const w = window.open("", "_blank");
+  if(!w){ toast("Popup block hai, ijazat dein"); return; }
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice - ${esc(r.name)}</title>
+<style>
+ @page{size:Letter;margin:18mm}
+ body{font-family:Arial,Helvetica,sans-serif;color:#000;max-width:780px;margin:20px auto;padding:0 16px;font-size:14px}
+ h1{text-align:center;font-size:26px;margin:0 0 4px;letter-spacing:1px}
+ h2{text-align:center;font-size:16px;margin:0 0 18px;font-weight:600}
+ .meta{display:flex;justify-content:space-between;margin-bottom:14px;gap:20px}
+ .meta div{flex:1}
+ .meta .l{font-weight:700}
+ .line{border-bottom:1px solid #000;display:inline-block;min-width:220px;padding:0 4px}
+ table{width:100%;border-collapse:collapse;margin-top:6px}
+ th,td{border:1px solid #000;padding:9px 8px;text-align:center}
+ th{background:#eee}
+ td.p{text-align:left}
+ .sum{margin-left:auto;width:55%;margin-top:0}
+ .sum td{text-align:right} .sum td:first-child{text-align:left;font-weight:700}
+ .warn{margin-top:26px;display:flex;justify-content:space-between;align-items:flex-end;font-weight:700}
+ .sig{border-top:1px solid #000;padding-top:4px;min-width:170px;text-align:center}
+ .legal{margin-top:18px;font-size:12px;line-height:1.5;text-align:justify}
+ .btnbar{text-align:center;margin-bottom:14px}
+ .btnbar button{padding:10px 26px;border:0;border-radius:30px;background:#1f9d55;color:#fff;font-size:15px;cursor:pointer}
+ @media print{.btnbar{display:none}}
+</style></head><body>
+<div class="btnbar"><button onclick="window.print()">🖨 Print / PDF Save</button></div>
+<h1>INVOICE</h1>
+<h2>DETAIL</h2>
+<div class="meta">
+ <div><span class="l">TO M/S:</span> <span class="line">${esc(r.name)}</span><br><span style="font-size:12px">${esc(r.address)}${r.phone? " | "+esc(r.phone):""}</span></div>
+ <div style="text-align:right"><span class="l">DATE:</span> <span class="line" style="min-width:140px">${date}</span></div>
+</div>
+<table>
+ <tr><th style="width:60px">QTY</th><th>Particulars</th><th style="width:100px">Batch No</th><th style="width:100px">Rate</th><th style="width:120px">Total Amount</th></tr>
+ <tr><td>${n0(c.qty)}</td><td class="p">${PRODUCT_NAME}</td><td>${esc(batchEl.value)}</td><td>${n0(c.rate)}</td><td>${n0(c.sub)}</td></tr>
+</table>
+<table class="sum">
+ <tr><td>Gross Amount</td><td>${n0(c.sub)}</td></tr>
+ <tr><td>Discount${c.d2? " ("+c.d2+"%)":""}</td><td>${n0(c.extra)}</td></tr>
+ <tr><td>Total Amount</td><td><b>${n0(c.total)}</b></td></tr>
+</table>
+<div class="warn"><span>Bill Warranty</span><span class="sig">Signature</span></div>
+<p class="legal">Warranty under section 23 (1) (I) of the Drug Act 1976, I Hussnain Ali being a person resident in Pakistan, caring on business at the given address under the name of M/s NUTRIVIA. 45 Mian Meer Shopping Centre, Lal Pul, Taj Pura Road, LHR. Do hereby give this warranty that the products described in this invoice do not contrivance in any way, the provisions at Section 23 of drug Act 1976.<br>
+<b>Note:</b> This warranty does not apply any consumer/Herbal/Food Supplement and Bio-chemic System of medicine are mentioned above this invoice.</p>
+</body></html>`);
+  w.document.close();
+}
+
+tbody.addEventListener("click", e=>{
+  const inv = e.target.closest("[data-inv]");
+  if(inv){ openInvoice(inv.dataset.inv); return; }
+  const del = e.target.closest("[data-del]");
+  if(del){
+    if(confirm("Is pharmacy ka record delete karein?")){
+      rows = rows.filter(r=>r.id!==del.dataset.del); save(); render();
+    }
+    return;
+  }
+  const gps = e.target.closest("[data-gps]");
+  if(gps){
+    if(!navigator.geolocation){ toast("Aap ka browser location support nahi karta"); return; }
+    toast("Location li ja rahi hai...");
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+      const r = rows.find(x=>x.id===gps.dataset.gps);
+      r.location = link; save(); render(); toast("Location lag gayi ✓");
+    }, ()=>toast("Location ki ijazat nahi mili"), {enableHighAccuracy:true,timeout:15000});
+  }
+});
+
+document.getElementById("addBtn").onclick = ()=>addRow();
+searchEl.addEventListener("input", render);
+
+document.getElementById("clearBtn").onclick = ()=>{
+  if(rows.length && confirm("Tamam records delete ho jayenge. Pakka?")){ rows=[]; save(); render(); }
+};
+
+document.getElementById("printBtn").onclick = ()=>window.print();
+
+document.getElementById("csvBtn").onclick = ()=>{
+  if(!rows.length){ toast("Koi record nahi hai"); return; }
+  const head = ["#","Pharmacy Name","Qty","Discount 1 %","Rate (after discount 1)","Qty x Rate","Extra Discount 2 %","Final Amount","Address","Contact","Location"];
+  const q = v => '"' + String(v||"").replace(/"/g,'""') + '"';
+  const lines = [head.map(q).join(",")].concat(rows.map((r,i)=>{
+    const c = calc(r);
+    return [i+1,r.name,r.qty,r.disc||0,Math.round(c.rate*100)/100,Math.round(c.sub*100)/100,r.disc2||0,Math.round(c.total*100)/100,r.address,"\t"+r.phone,r.location].map(q).join(",");
+  }));
+  const blob = new Blob(["\ufeff"+lines.join("\n")],{type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "nutrivia-pharmacies.csv"; a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+if(!rows.length) rows.push({id:uid(),name:"",qty:"",disc:"",disc2:"",address:"",phone:"",location:""});
+render();
+</script>
+</body>
+</html>
